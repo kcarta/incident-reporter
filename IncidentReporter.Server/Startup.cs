@@ -20,6 +20,9 @@ namespace IncidentReporter.Server
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });
+            services.AddSingleton<IncidentService>();
+            services.AddTransient<LiteDbContext>();
+            services.Configure<DbConfig>(options => options.Path = @"incidents.db");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

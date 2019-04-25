@@ -1,7 +1,37 @@
 ﻿@page "/"
+@using IncidentReporter.Shared
+@inject HttpClient Http
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<a class="btn btn-link" role="button" href="/incident">Create New Incident</a>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Id</th>
+            <th scope="col">Summary</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var incident in incidents)
+        {
+            <tr>
+                <th scope="row">@incident.Date</th>
+                <th scope="row">@incident.Id</th>
+                <th scope="row">@incident.Summary</th>
+                <th scope="row"><a href="/incident/@incident.Id">Edit</a></th>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@functions {
+    private List<Incident> incidents = new List<Incident>();
+
+    protected override async Task OnInitAsync()
+    {
+        incidents = await Http.GetJsonAsync<List<Incident>>("api/Incident/Incidents");
+    }
+}
