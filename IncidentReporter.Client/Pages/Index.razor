@@ -32,6 +32,6 @@
 
     protected override async Task OnInitAsync()
     {
-        incidents = await Http.GetJsonAsync<List<Incident>>("api/Incident/Incidents");
+        incidents = await Http.GetJsonAsync<List<Incident>>("api/Incident/");
     }
 }

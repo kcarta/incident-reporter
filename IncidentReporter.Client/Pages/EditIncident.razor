@@ -61,7 +61,7 @@
     {
         if (Id != null)
         {
-            // incident = await IncidentService.GetIncidentByIdAsync(Id);
+            incident = await Http.GetJsonAsync<Incident>($"api/Incident/{Id}");
         }
         else
         {
@@ -76,7 +76,7 @@
 
     private async Task HandleValidSubmit()
     {
-        // await IncidentService.SaveIncidentAsync(incident);
+        await Http.SendJsonAsync(HttpMethod.Post, @"api/Incident", incident);
         UriHelper.NavigateTo("/");
     }
 }
