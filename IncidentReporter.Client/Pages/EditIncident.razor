@@ -6,36 +6,37 @@
 
 <h2>Viewing Incident: @Id</h2>
 
-<EditForm Model="@incident" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
+<form method="post">
     <div class="form-group">
         <label for="date">Date</label>
-        <InputDate Id="date" bind-Value="@incident.Date" Class="form-control" />
+        <input type="datetime" id="date" bind="@incident.Date" class="form-control" />
     </div>
     <div class="form-group">
         <label for="summary">Summary</label>
-        <InputText Id="summary" bind-Value="@incident.Summary" Class="form-control" />
+        <input type="text" id="summary" bind="@incident.Summary" class="form-control" />
     </div>
     <div class="form-group">
         <label for="impact">Impact</label>
-        <InputText Id="impact" bind-Value="@incident.Impact" Class="form-control" />
+        <input type="text" id="impact" bind="@incident.Impact" Class="form-control" />
     </div>
-    <div class="form-group">
-        <label for="root-causes"></label>
-    </div>
+
+    @for (var i = 0; i < rootCauses.Count; i++)
+    {
+        <RootCause RootCauses="@rootCauses" Index="@i" />
+    }
+    <button type="button" class="btn btn-secondary" onclick="@AddRootCause">Add root cause</button>
+
     <div class="form-group">
         <label for="trigger">Trigger</label>
-        <InputText Id="trigger" bind-Value="@incident.Trigger" Class="form-control" />
+        <input type="text" id="trigger" bind="@incident.Trigger" class="form-control" />
     </div>
     <div class="form-group">
         <label for="resolution">Resolution</label>
-        <InputText Id="resolution" bind-Value="@incident.Resolution" Class="form-control" />
+        <input type="text" id="resolution" bind="@incident.Resolution" class="form-control" />
     </div>
     <div class="form-group">
         <label for="detection">Detection</label>
-        <InputText Id="detection" bind-Value="@incident.Detection" Class="form-control" />
+        <input type="text" id="detection" bind="@incident.Detection" class="form-control" />
     </div>
     <div class="form-group">
         <label for="actions-taken"></label>
@@ -46,22 +47,26 @@
     <div class="form-group">
         <label for="lessons-learned"></label>
     </div>
-
-    <button class="btn btn-primary" type="submit">Submit</button>
-</EditForm>
+    <button class="btn btn-primary" type="button" onclick="@Submit">Submit</button>
+</form>
 
 
 @functions {
     [Parameter]
     private string Id { get; set; }
 
-    private Incident incident;
+    private Incident incident = new Incident();
+    private List<string> rootCauses = new List<string>();
 
     protected override async Task OnInitAsync()
     {
         if (Id != null)
         {
             incident = await Http.GetJsonAsync<Incident>($"api/Incident/{Id}");
+            if (incident.RootCauses != null)
+            {
+                rootCauses = incident.RootCauses;
+            }
         }
         else
         {
@@ -74,9 +79,15 @@
         }
     }
 
-    private async Task HandleValidSubmit()
+    private async Task Submit()
     {
+        incident.RootCauses = rootCauses;
         await Http.SendJsonAsync(HttpMethod.Post, @"api/Incident", incident);
         UriHelper.NavigateTo("/");
+    }
+
+    private void AddRootCause()
+    {
+        rootCauses.Add("");
     }
 }

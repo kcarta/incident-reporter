@@ -1,0 +1,19 @@
+﻿<div class="form-group">
+    <label for="root-cause_@i">Root Cause @(i + 1)</label>
+    <input id="root-cause_@i" bind="@RootCauses[i]" class="form-control" />
+</div>
+
+@functions {
+    [Parameter]
+    private List<string> RootCauses { get; set; }
+
+    [Parameter]
+    private int Index { get; set; }
+
+    private int i;
+
+    protected override void OnInit()
+    {
+        i = Index;
+    }
+}
