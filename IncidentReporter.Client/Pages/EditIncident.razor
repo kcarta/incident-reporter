@@ -19,13 +19,7 @@
         <label for="impact">Impact</label>
         <input type="text" id="impact" bind="@incident.Impact" Class="form-control" />
     </div>
-
-    @for (var i = 0; i < rootCauses.Count; i++)
-    {
-        <RootCause RootCauses="@rootCauses" Index="@i" />
-    }
-    <button type="button" class="btn btn-secondary" onclick="@AddRootCause">Add root cause</button>
-
+    <RootCauses Collection="@rootCauses" />
     <div class="form-group">
         <label for="trigger">Trigger</label>
         <input type="text" id="trigger" bind="@incident.Trigger" class="form-control" />
@@ -72,7 +66,7 @@
         {
             incident = new Incident
             {
-                Id = DateTime.Now.ToString("ddMMyyhhmm"),
+                Id = DateTime.Now.ToString("ddMMyyhhmmss"),
                 Date = DateTime.Now
             };
             Id = incident.Id;
@@ -81,13 +75,8 @@
 
     private async Task Submit()
     {
-        incident.RootCauses = rootCauses;
+        incident.RootCauses = rootCauses.Where(rootCause => !string.IsNullOrWhiteSpace(rootCause)).ToList();
         await Http.SendJsonAsync(HttpMethod.Post, @"api/Incident", incident);
         UriHelper.NavigateTo("/");
-    }
-
-    private void AddRootCause()
-    {
-        rootCauses.Add("");
     }
 }
