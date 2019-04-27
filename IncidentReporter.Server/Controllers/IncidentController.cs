@@ -18,21 +18,22 @@ namespace IncidentReporter.Server.Controllers
         {
             this.logger = logger;
             incidents = db.Context.GetCollection<Incident>();
-            incidents.Upsert(new Incident { Id = "42", Date = DateTime.Now, Summary = "I am the default incident" });
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Incident>> GetIncidents()
         {
             logger.LogInformation("Retrieving all incidents");
-            return incidents.FindAll().ToList();
+            var result = incidents.FindAll().ToList();
+            return result;
         }
 
         [HttpGet("{id}")]
         public ActionResult<Incident> Get(string id)
         {
             logger.LogInformation($"Retrieving incident with Id: {id}");
-            return incidents.FindOne(incident => incident.Id == id);
+            var result = incidents.FindOne(incident => incident.Id == id);
+            return result;
         }
 
         [HttpPost]

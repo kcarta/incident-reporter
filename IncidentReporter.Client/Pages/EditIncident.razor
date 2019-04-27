@@ -3,10 +3,15 @@
 @using IncidentReporter.Shared
 @inject IUriHelper UriHelper
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
 
 <h2>Viewing Incident: @Id</h2>
 
 <form method="post">
+    <div class="form-check">
+        <input type="checkbox" id="is-resolved" bind="@incident.IsResolved" class="form-check-input" />
+        <label class="form-check-label" for="is-resolved">Is Resolved</label>
+    </div>
     <div class="form-group">
         <label for="date">Date</label>
         <input type="datetime" id="date" bind="@incident.Date" class="form-control" />
@@ -64,12 +69,9 @@
         }
         else
         {
-            incident = new Incident
-            {
-                Id = DateTime.Now.ToString("ddMMyyhhmmss"),
-                Date = DateTime.Now
-            };
+            incident = new Incident { Id = DateTime.Now.ToString("ddMMyyhhmmss"), Date = DateTime.Now };
             Id = incident.Id;
+            await JSRuntime.InvokeAsync<string>("ReplaceState", $"incident/{incident.Id}");
         }
     }
 

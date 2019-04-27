@@ -2,35 +2,51 @@
 @using IncidentReporter.Shared
 @inject HttpClient Http
 
-<a class="btn btn-link" role="button" href="/incident">Create New Incident</a>
-
+<a class="btn btn-outline-primary" role="button" href="/incident">New Incident</a>
+<h2>Active Incidents</h2>
 <table class="table">
     <thead>
         <tr>
             <th scope="col">Date</th>
-            <th scope="col">Id</th>
             <th scope="col">Summary</th>
-            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var incident in incidents)
+        @foreach (var incident in incidents.Where(inc => !inc.IsResolved).OrderByDescending(inc => inc.Date))
         {
             <tr>
-                <th scope="row">@incident.Date</th>
-                <th scope="row">@incident.Id</th>
-                <th scope="row">@incident.Summary</th>
-                <th scope="row"><a href="/incident/@incident.Id">Edit</a></th>
+                <td>@incident.Date</td>
+                <td><a href="/incident/@incident.Id">@incident.Summary</a></td>
             </tr>
         }
     </tbody>
 </table>
+<h2>Resolved Incidents</h2>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var incident in incidents.Where(inc => inc.IsResolved).OrderByDescending(inc => inc.Date))
+            {
+                <tr>
+                    <td>@incident.Date</td>
+                    <td><a href="/incident/@incident.Id">@incident.Summary</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @functions {
-    private List<Incident> incidents = new List<Incident>();
+    private IEnumerable<Incident> incidents = new List<Incident>();
 
     protected override async Task OnInitAsync()
     {
-        incidents = await Http.GetJsonAsync<List<Incident>>("api/Incident/");
+        incidents = await Http.GetJsonAsync<IEnumerable<Incident>>("api/Incident/");
     }
 }

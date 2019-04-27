@@ -6,6 +6,7 @@ namespace IncidentReporter.Shared
     public class Incident
     {
         public string Id { get; set; }
+        public Boolean IsResolved { get; set; }
         public DateTime Date { get; set; }
         public string Summary { get; set; }
         public string Impact { get; set; }
