@@ -1,0 +1,29 @@
+﻿@using IncidentReporter.Shared
+
+@for (var i = 0; i < Collection.Count; i++)
+{
+    <ActionTakenComponent ActionsTaken="@Collection" Index="@i" />
+}
+<button type="button" class="btn btn-danger" disabled="@(Collection.Count == 0)" onclick="@RemoveLast">Remove Last</button>
+<button type="button" class="btn btn-outline-success float-left" onclick="@AddActionTaken">Add Action Taken</button>
+
+@functions {
+    [Parameter]
+    private List<ActionTaken> Collection { get; set; }
+
+    private void AddActionTaken()
+    {
+        Collection.Add(new ActionTaken { Timestamp = DateTime.Now });
+    }
+
+    private void RemoveLast()
+    {
+        Collection.RemoveAt(Collection.Count - 1);
+    }
+
+    private void DeleteRootCause(int index)
+    {
+        Collection = Collection.Where((_, i) => i != index).ToList();
+        this.StateHasChanged();
+    }
+}

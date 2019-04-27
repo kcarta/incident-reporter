@@ -37,6 +37,7 @@
         <label for="detection">Detection</label>
         <input type="text" id="detection" bind="@incident.Detection" class="form-control" />
     </div>
+    <ActionsTaken Collection="@actionsTaken" />
     <div class="form-group">
         <label for="actions-taken"></label>
     </div>
@@ -56,16 +57,16 @@
 
     private Incident incident = new Incident();
     private List<string> rootCauses = new List<string>();
+    private List<ActionTaken> actionsTaken = new List<ActionTaken>();
+
 
     protected override async Task OnInitAsync()
     {
         if (Id != null)
         {
             incident = await Http.GetJsonAsync<Incident>($"api/Incident/{Id}");
-            if (incident.RootCauses != null)
-            {
-                rootCauses = incident.RootCauses;
-            }
+            rootCauses.AddRange(incident.RootCauses ?? new List<string>());
+            actionsTaken.AddRange(incident.ActionsTaken ?? new List<ActionTaken>());
         }
         else
         {
@@ -78,6 +79,7 @@
     private async Task Submit()
     {
         incident.RootCauses = rootCauses.Where(rootCause => !string.IsNullOrWhiteSpace(rootCause)).ToList();
+        incident.ActionsTaken = actionsTaken;
         await Http.SendJsonAsync(HttpMethod.Post, @"api/Incident", incident);
         UriHelper.NavigateTo("/");
     }

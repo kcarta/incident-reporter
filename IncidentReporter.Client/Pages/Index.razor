@@ -7,8 +7,8 @@
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Summary</th>
+            <th>Date</th>
+            <th>Summary</th>
         </tr>
     </thead>
     <tbody>
@@ -22,25 +22,23 @@
     </tbody>
 </table>
 <h2>Resolved Incidents</h2>
-<div class="table-responsive">
-    <table class="table">
-        <thead>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Summary</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var incident in incidents.Where(inc => inc.IsResolved).OrderByDescending(inc => inc.Date))
+        {
             <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Summary</th>
+                <td>@incident.Date</td>
+                <td><a href="/incident/@incident.Id">@incident.Summary</a></td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var incident in incidents.Where(inc => inc.IsResolved).OrderByDescending(inc => inc.Date))
-            {
-                <tr>
-                    <td>@incident.Date</td>
-                    <td><a href="/incident/@incident.Id">@incident.Summary</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+        }
+    </tbody>
+</table>
 
 @functions {
     private IEnumerable<Incident> incidents = new List<Incident>();
