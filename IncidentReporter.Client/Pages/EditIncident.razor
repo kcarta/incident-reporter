@@ -24,7 +24,7 @@
         <label for="impact">Impact</label>
         <input type="text" id="impact" bind="@incident.Impact" Class="form-control" />
     </div>
-    <RootCauses Collection="@rootCauses" />
+    <InputCollection Type="Root Cause" Collection="@rootCauses" />
     <div class="form-group">
         <label for="trigger">Trigger</label>
         <input type="text" id="trigger" bind="@incident.Trigger" class="form-control" />
@@ -38,15 +38,9 @@
         <input type="text" id="detection" bind="@incident.Detection" class="form-control" />
     </div>
     <ActionsTaken Collection="@actionsTaken" />
-    <div class="form-group">
-        <label for="actions-taken"></label>
-    </div>
-    <div class="form-group">
-        <label for="work-items"></label>
-    </div>
-    <div class="form-group">
-        <label for="lessons-learned"></label>
-    </div>
+    <InputCollection Type="Work Item" Collection="@workItems" />
+    <InputCollection Type="Lesson Learned" Collection="@lessonsLearned" />
+
     <button class="btn btn-primary" type="button" onclick="@Submit">Submit</button>
 </form>
 
@@ -57,6 +51,8 @@
 
     private Incident incident = new Incident();
     private List<string> rootCauses = new List<string>();
+    private List<string> workItems = new List<string>();
+    private List<string> lessonsLearned = new List<string>();
     private List<ActionTaken> actionsTaken = new List<ActionTaken>();
 
 
@@ -66,11 +62,19 @@
         {
             incident = await Http.GetJsonAsync<Incident>($"api/Incident/{Id}");
             rootCauses.AddRange(incident.RootCauses ?? new List<string>());
+            workItems.AddRange(incident.WorkItems ?? new List<string>());
+            lessonsLearned.AddRange(incident.LessonsLearned ?? new List<string>());
             actionsTaken.AddRange(incident.ActionsTaken ?? new List<ActionTaken>());
         }
         else
         {
-            incident = new Incident { Id = DateTime.Now.ToString("ddMMyyhhmmss"), Date = DateTime.Now };
+            DateTime incidentCreationTimestamp = DateTime.Now;
+            incident = new Incident
+            {
+                Id = incidentCreationTimestamp.ToString("ddMMyyhhmmss"),
+                Date = incidentCreationTimestamp,
+                Summary = $"Incident at {incidentCreationTimestamp.ToLongDateString()} {incidentCreationTimestamp.ToLongTimeString()}"
+            };
             Id = incident.Id;
             await JSRuntime.InvokeAsync<string>("ReplaceState", $"incident/{incident.Id}");
         }
@@ -79,6 +83,8 @@
     private async Task Submit()
     {
         incident.RootCauses = rootCauses.Where(rootCause => !string.IsNullOrWhiteSpace(rootCause)).ToList();
+        incident.WorkItems = workItems.Where(workItem => !string.IsNullOrWhiteSpace(workItem)).ToList();
+        incident.LessonsLearned = lessonsLearned.Where(lessonsLearned => !string.IsNullOrWhiteSpace(lessonsLearned)).ToList();
         incident.ActionsTaken = actionsTaken;
         await Http.SendJsonAsync(HttpMethod.Post, @"api/Incident", incident);
         UriHelper.NavigateTo("/");

@@ -1,0 +1,22 @@
+﻿<div class="form-group">
+    <label for="item_@i">@Type @(i + 1)</label>
+    <input id="item_@i" bind="@Collection[i]" class="form-control" />
+</div>
+
+@functions {
+    [Parameter]
+    private List<string> Collection { get; set; }
+
+    [Parameter]
+    private string Type { get; set; }
+
+    [Parameter]
+    private int Index { get; set; }
+
+    private int i;
+
+    protected override void OnInit()
+    {
+        i = Index;
+    }
+}

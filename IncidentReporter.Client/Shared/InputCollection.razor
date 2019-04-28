@@ -1,0 +1,26 @@
+﻿<div>
+    @for (var i = 0; i < Collection.Count; i++)
+    {
+        <CollectionItem Collection="@Collection" Index="@i" Type="@Type" />
+    }
+    <button type="button" class="btn btn-danger" disabled="@(Collection.Count == 0)" onclick="@RemoveLast">Remove Last</button>
+    <button type="button" class="btn btn-outline-success float-left" onclick="@AddItem">Add @Type</button>
+</div>
+
+@functions {
+    [Parameter]
+    private List<string> Collection { get; set; }
+
+    [Parameter]
+    private string Type { get; set; }
+
+    private void AddItem()
+    {
+        Collection.Add("");
+    }
+
+    private void RemoveLast()
+    {
+        Collection.RemoveAt(Collection.Count - 1);
+    }
+}
