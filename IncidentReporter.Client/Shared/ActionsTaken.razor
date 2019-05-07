@@ -5,7 +5,7 @@
     <thead>
         <tr>
             <th class="w-auto">Timestamp</th>
-            <th class="w-75">Description</th>
+            <th class="w-50">Description</th>
             <th class="w-auto"></th>
         </tr>
     </thead>
@@ -24,7 +24,7 @@
                     </div>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-danger" on onclick="@(() => Remove(actionTaken))">Remove</button>
+                    <button type="button" class="btn btn-danger" onclick="@(() => Remove(actionTaken))">Remove</button>
                 </td>
             </tr>
         }
@@ -36,12 +36,7 @@
             </td>
             <td>
                 <div class="form-group">
-                    <input type="text" bind="@DummyAction.Description" class="form-control" />
-                </div>
-            </td>
-            <td>
-                <div>
-                    <button type="button" class="btn btn-outline-success" onclick="@Add">Add</button>
+                    <input type="text" bind="@DummyAction.Description" onfocusout="@Add" class="form-control" />
                 </div>
             </td>
         </tr>
@@ -56,6 +51,10 @@
 
     private void Add()
     {
+        if (string.IsNullOrWhiteSpace(DummyAction.Description))
+        {
+            return;
+        }
         var newAction = new ActionTaken
         {
             Id = Guid.NewGuid(),
