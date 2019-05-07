@@ -1,29 +1,35 @@
 ﻿@using IncidentReporter.Shared
 
-@for (var i = 0; i < Collection.Count; i++)
-{
-    <ActionTakenComponent ActionsTaken="@Collection" Index="@i" />
-}
-<button type="button" class="btn btn-danger" disabled="@(Collection.Count == 0)" onclick="@RemoveLast">Remove Last</button>
 <button type="button" class="btn btn-outline-success float-left" onclick="@AddActionTaken">Add Action Taken</button>
+@foreach (var actionTaken in Actions)
+{
+    <div class="row">
+        <div class="form-group col-3">
+            <label for="action-timestamp_@actionTaken.Id">Timestamp</label>
+            <input type="datetime" id="action-timestamp_@actionTaken.Id" bind="@actionTaken.Timestamp" class="form-control" />
+        </div>
+        <div class="form-group col-6">
+            <label for="action-description_@actionTaken.Id">Description</label>
+            <input type="text" id="action-description_@actionTaken.Id" bind="@actionTaken.Description" class="form-control" />
+        </div>
+        <div col-3>
+            <button type="button" class="btn btn-danger" onclick="@(() => Remove(actionTaken))">Remove</button>
+        </div>
+    </div>
+}
 
 @functions {
     [Parameter]
-    private List<ActionTaken> Collection { get; set; }
+    private List<ActionTaken> Actions { get; set; }
 
     private void AddActionTaken()
     {
-        Collection.Add(new ActionTaken { Timestamp = DateTime.Now });
+        Actions.Add(new ActionTaken { Id = Guid.NewGuid(), Timestamp = DateTime.Now });
     }
 
-    private void RemoveLast()
+    private void Remove(ActionTaken actionTaken)
     {
-        Collection.RemoveAt(Collection.Count - 1);
-    }
-
-    private void DeleteRootCause(int index)
-    {
-        Collection = Collection.Where((_, i) => i != index).ToList();
-        this.StateHasChanged();
+        Actions.RemoveAll((action) => action.Id == actionTaken.Id);
+        this.StateHasChanged(); // TODO is this needed? If so, why isn't it needed in the Add handler?
     }
 }

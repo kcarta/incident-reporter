@@ -8,22 +8,18 @@
 <h2>Viewing Incident: @Id</h2>
 
 <form method="post">
-    <div class="background">
-        <div class="form-group">
+    <div class="background row">
+        <div class="form-group col-3">
             <label for="date">Date</label>
             <input type="datetime" id="date" bind="@incident.Date" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="form-group col-9">
             <label for="summary">Summary</label>
             <input type="text" id="summary" bind="@incident.Summary" class="form-control" />
         </div>
-        <div class="form-check">
-            <input type="checkbox" id="is-resolved" bind="@incident.IsResolved" class="form-check-input" />
-            <label class="form-check-label" for="is-resolved">Is Resolved</label>
-        </div>
     </div>
 
-    <ActionsTaken Collection="@actionsTaken" />
+    <ActionsTaken Actions="@actionsTaken" />
 
     <div class="description">
         <div class="form-group">
@@ -35,6 +31,10 @@
             <input type="text" id="trigger" bind="@incident.Trigger" class="form-control" />
         </div>
         <div class="form-group">
+            <label for="detection">Detection</label>
+            <input type="text" id="detection" bind="@incident.Detection" class="form-control" />
+        </div>
+        <div class="form-group">
             <label for="impact">Impact</label>
             <input type="text" id="impact" bind="@incident.Impact" Class="form-control" />
         </div>
@@ -43,13 +43,13 @@
             <input type="text" id="resolution" bind="@incident.Resolution" class="form-control" />
         </div>
         <div class="form-group">
-            <label for="detection">Detection</label>
-            <input type="text" id="detection" bind="@incident.Detection" class="form-control" />
-        </div>
-        <div class="form-group">
             <label for="lessons-learned">Lessons Learned</label>
             <input type="text" id="lessons-learned" bind="@incident.LessonsLearned" class="form-control" />
         </div>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" id="is-resolved" bind="@incident.IsResolved" class="form-check-input" />
+        <label class="form-check-label" for="is-resolved">Is Resolved</label>
     </div>
     <!-- TODO: Auto-fill these from work item integration -->
     <!-- <InputCollection Type="Work Item" Collection="@workItems" /> -->
