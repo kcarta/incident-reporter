@@ -5,6 +5,8 @@
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 
+<button class="return-button btn btn-outline-secondary" type="button" onclick="@(() => UriHelper.NavigateTo("/"))">Return</button>
+
 <h1>Incident @Id</h1>
 
 <form method="post">
