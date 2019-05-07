@@ -1,35 +1,87 @@
 ﻿@using IncidentReporter.Shared
+@using System.Timers
 
-<button type="button" class="btn btn-outline-success float-left" onclick="@AddActionTaken">Add Action Taken</button>
-@foreach (var actionTaken in Actions)
-{
-    <div class="row">
-        <div class="form-group col-3">
-            <label for="action-timestamp_@actionTaken.Id">Timestamp</label>
-            <input type="datetime" id="action-timestamp_@actionTaken.Id" bind="@actionTaken.Timestamp" class="form-control" />
-        </div>
-        <div class="form-group col-6">
-            <label for="action-description_@actionTaken.Id">Description</label>
-            <input type="text" id="action-description_@actionTaken.Id" bind="@actionTaken.Description" class="form-control" />
-        </div>
-        <div col-3>
-            <button type="button" class="btn btn-danger" onclick="@(() => Remove(actionTaken))">Remove</button>
-        </div>
-    </div>
-}
+<table class="table">
+    <thead>
+        <tr>
+            <th class="w-auto">Timestamp</th>
+            <th class="w-75">Description</th>
+            <th class="w-auto"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var actionTaken in Actions)
+        {
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <input type="datetime" bind="@actionTaken.Timestamp" class="form-control" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input type="text" bind="@actionTaken.Description" class="form-control" />
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" on onclick="@(() => Remove(actionTaken))">Remove</button>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>
+                <div class="form-group">
+                    <input type="datetime" bind="@DummyAction.Timestamp)" readonly class="form-control-plaintext" />
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="text" bind="@DummyAction.Description" class="form-control" />
+                </div>
+            </td>
+            <td>
+                <div>
+                    <button type="button" class="btn btn-outline-success" onclick="@Add">Add</button>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 @functions {
     [Parameter]
     private List<ActionTaken> Actions { get; set; }
 
-    private void AddActionTaken()
+    private ActionTaken DummyAction { get; set; } = new ActionTaken { Timestamp = DateTime.Now };
+
+    private void Add()
     {
-        Actions.Add(new ActionTaken { Id = Guid.NewGuid(), Timestamp = DateTime.Now });
+        var newAction = new ActionTaken
+        {
+            Id = Guid.NewGuid(),
+            Timestamp = DummyAction.Timestamp,
+            Description = DummyAction.Description
+        };
+        Actions.Add(newAction);
+        DummyAction = new ActionTaken { Timestamp = DateTime.Now };
     }
 
     private void Remove(ActionTaken actionTaken)
     {
         Actions.RemoveAll((action) => action.Id == actionTaken.Id);
         this.StateHasChanged(); // TODO is this needed? If so, why isn't it needed in the Add handler?
+    }
+
+    protected override void OnInit()
+    {
+        var timer = new Timer();
+        timer.Elapsed += (sender, args) =>
+        {
+            DummyAction.Timestamp = DateTime.Now;
+            this.StateHasChanged();
+        };
+        timer.Interval = TimeSpan.FromSeconds(1).TotalSeconds;
+        timer.AutoReset = true;
+        timer.Start();
     }
 }
