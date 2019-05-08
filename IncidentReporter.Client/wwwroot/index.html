@@ -13,9 +13,12 @@
 
     <script src="_framework/blazor.webassembly.js"></script>
     <script>
-        window.ReplaceState = function(newState) {
+        window.ReplaceState = function (newState) {
             window.history.replaceState("", "", newState)
-        }
+        };
+        window.SetFocusInDummyAction = function () {
+            document.getElementById("dummy-action-input").focus();
+        };
     </script>
 </body>
 </html>

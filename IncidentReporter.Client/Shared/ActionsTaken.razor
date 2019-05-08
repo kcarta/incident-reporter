@@ -1,5 +1,6 @@
 ﻿@using IncidentReporter.Shared
 @using System.Timers
+@inject IJSRuntime JSRuntime
 
 <table class="table">
     <thead>
@@ -14,14 +15,10 @@
         {
             <tr>
                 <td>
-                    <div class="form-group">
-                        <input type="datetime" bind="@actionTaken.Timestamp" class="form-control" />
-                    </div>
+                    <div class="form-group"><input type="datetime" bind="@actionTaken.Timestamp" class="form-control" /></div>
                 </td>
                 <td>
-                    <div class="form-group">
-                        <input type="text" bind="@actionTaken.Description" class="form-control" />
-                    </div>
+                    <div class="form-group"><input type="text" bind="@actionTaken.Description" class="form-control" /></div>
                 </td>
                 <td>
                     <button type="button" class="btn btn-danger" onclick="@(() => Remove(actionTaken))">Remove</button>
@@ -30,14 +27,10 @@
         }
         <tr>
             <td>
-                <div class="form-group">
-                    <input type="datetime" bind="@DummyAction.Timestamp)" readonly class="form-control-plaintext" />
-                </div>
+                <div class="form-group"><input type="datetime" bind="@DummyAction.Timestamp)" readonly class="form-control-plaintext" /></div>
             </td>
             <td>
-                <div class="form-group">
-                    <input type="text" bind="@DummyAction.Description" onfocusout="@Add" class="form-control" />
-                </div>
+                <div class="form-group"><input type="text" bind="@DummyAction.Description" onfocusout="@Add" class="form-control" id="dummy-action-input" /></div>
             </td>
         </tr>
     </tbody>
@@ -49,7 +42,7 @@
 
     private ActionTaken DummyAction { get; set; } = new ActionTaken { Timestamp = DateTime.Now };
 
-    private void Add()
+    private async Task Add()
     {
         if (string.IsNullOrWhiteSpace(DummyAction.Description))
         {
@@ -63,12 +56,12 @@
         };
         Actions.Add(newAction);
         DummyAction = new ActionTaken { Timestamp = DateTime.Now };
+        await JSRuntime.InvokeAsync<string>("SetFocusInDummyAction");
     }
 
     private void Remove(ActionTaken actionTaken)
     {
         Actions.RemoveAll((action) => action.Id == actionTaken.Id);
-        this.StateHasChanged(); // TODO is this needed? If so, why isn't it needed in the Add handler?
     }
 
     protected override void OnInit()
