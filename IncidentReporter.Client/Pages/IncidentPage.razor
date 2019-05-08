@@ -7,9 +7,8 @@
 
 <button class="return-button btn btn-outline-secondary" type="button" onclick="@(() => UriHelper.NavigateTo("/"))">Return</button>
 
-<h1>Incident @Id</h1>
-
 <form method="post">
+    <h1>Incident @Id</h1>
     <div class="background row">
         <div class="form-group col-2">
             <label for="date">Date</label>
@@ -21,11 +20,13 @@
         </div>
     </div>
 
-    <h2>Actions Taken</h2>
-    <ActionsTaken Actions="@actionsTaken" />
+    <div class="actions-taken row">
+        <h2>Actions Taken</h2>
+        <ActionsTaken Actions="@actionsTaken" />
+    </div>
 
     <h2>Report</h2>
-    <div class="report">
+    <div class="report row">
         <div class="form-group">
             <label for="root-cause">Root Cause</label>
             <input type="text" id="root-case" bind="@incident.RootCause" class="form-control" />
