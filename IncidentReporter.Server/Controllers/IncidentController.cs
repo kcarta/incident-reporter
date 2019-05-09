@@ -2,9 +2,9 @@
 using LiteDB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace IncidentReporter.Server.Controllers
 {
@@ -41,6 +41,16 @@ namespace IncidentReporter.Server.Controllers
         {
             logger.LogInformation($"Saving incident with Id: {incident.Id}");
             incidents.Upsert(incident.Id, incident);
+        }
+
+        [Route("Export")]
+        [HttpPost]
+        public JsonResult Export([FromBody] Incident incident)
+        {
+            var text = new StringBuilder()
+                .AppendLine(incident.Summary)
+                .ToString();
+            return new JsonResult(text);
         }
     }
 }
