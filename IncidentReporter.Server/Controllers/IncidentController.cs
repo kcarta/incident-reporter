@@ -48,9 +48,34 @@ namespace IncidentReporter.Server.Controllers
         public JsonResult Export([FromBody] Incident incident)
         {
             var text = new StringBuilder()
+                .AppendLine("# Incident report:")
+                .AppendLine("\n## Date")
+                .AppendLine(incident.Date.ToString("dd-MM-yyyy"))
+                .AppendLine("\n## Summary")
                 .AppendLine(incident.Summary)
-                .ToString();
-            return new JsonResult(text);
+                .AppendLine("\n## Status")
+                .AppendLine(incident.IsResolved ? "Resolved" : "Ongoing")
+                .AppendLine("\n## Impact")
+                .AppendLine(incident.Impact)
+                .AppendLine("\n## Root Cause")
+                .AppendLine(incident.RootCause)
+                .AppendLine("\n## Trigger")
+                .AppendLine(incident.Trigger)
+                .AppendLine("\n## Timeline")
+                .AppendLine("\n| Time | Description |")
+                .AppendLine("| ---- | ----------- |");
+            foreach (var action in incident.ActionsTaken)
+            {
+                var timestamp = action.Timestamp.ToString("dd-MM-yy HH:mm");
+                text.AppendLine($"| {timestamp} | {action.Description} |");
+            }
+            text.AppendLine("\n## Resolution")
+                .AppendLine(incident.Resolution)
+                .AppendLine("\n## Detection")
+                .AppendLine(incident.Detection)
+                .AppendLine("\n## Lessons Learned")
+                .AppendLine(incident.LessonsLearned);
+            return new JsonResult(text.ToString());
         }
     }
 }

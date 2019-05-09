@@ -28,6 +28,7 @@
     </tbody>
 </table>
 <h2>Resolved Incidents</h2>
+<!-- TODO: Make a shared component to reduce duplication in these two tables -->
 <table class="table">
     <thead>
         <tr>
@@ -41,6 +42,9 @@
             <tr>
                 <td>@incident.Date</td>
                 <td><a href="/incident/@incident.Id">@incident.Summary</a></td>
+                <td>
+                    <button type="button" class="btn btn-secondary" onclick="@(() => Export(@incident))">Export</button>
+                </td>
             </tr>
         }
     </tbody>
