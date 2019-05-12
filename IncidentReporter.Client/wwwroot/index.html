@@ -20,6 +20,14 @@
         window.SetFocusInDummyAction = function () {
             document.getElementById("dummy-action-input").focus();
         };
+        window.SaveAsFile = function (filename, bytesBase64) {
+            var link = document.createElement("a");
+            link.download = filename;
+            link.href = "data:application/octet-stream;base64," + bytesBase64;
+            document.body.appendChild(link); // Needed for Firefox
+            link.click();
+            document.body.removeChild(link);
+        };
     </script>
 </body>
 </html>

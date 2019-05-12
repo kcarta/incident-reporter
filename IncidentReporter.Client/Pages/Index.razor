@@ -1,5 +1,7 @@
 ﻿@page "/"
 @using IncidentReporter.Shared
+@using System.Text
+@inject IJSRuntime JSRuntime
 @inject HttpClient Http
 
 <h2 class="mt-4">Active Incidents</h2>
@@ -8,6 +10,7 @@
         <tr>
             <th>Date</th>
             <th>Summary</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -16,12 +19,16 @@
             <tr>
                 <td>@incident.Date</td>
                 <td><a href="/incident/@incident.Id">@incident.Summary</a></td>
+                <td>
+                    <button type="button" class="btn btn-secondary" onclick="@(() => Export(@incident))">Export</button>
+                </td>
             </tr>
         }
     </tbody>
 </table>
 
 <h2 class="mt-4">Resolved Incidents</h2>
+<!-- TODO: Make a shared component to reduce duplication in these two tables -->
 <table class="table">
     <thead>
         <tr>
@@ -35,6 +42,9 @@
             <tr>
                 <td>@incident.Date</td>
                 <td><a href="/incident/@incident.Id">@incident.Summary</a></td>
+                <td>
+                    <button type="button" class="btn btn-secondary" onclick="@(() => Export(@incident))">Export</button>
+                </td>
             </tr>
         }
     </tbody>
@@ -50,5 +60,12 @@
     protected override async Task OnInitAsync()
     {
         incidents = await Http.GetJsonAsync<IEnumerable<Incident>>("api/Incident/");
+    }
+
+    private async Task Export(Incident incident)
+    {
+        var markdown = await Http.SendJsonAsync<string>(HttpMethod.Post, @"api/Incident/Export", incident);
+        var bytes = Encoding.UTF8.GetBytes(markdown);
+        await JSRuntime.InvokeAsync<string>("SaveAsFile", $"incident-{incident.Id}.md", Convert.ToBase64String(bytes));
     }
 }
