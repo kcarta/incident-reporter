@@ -5,60 +5,67 @@
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 
-<button class="return-button btn btn-outline-secondary" type="button" onclick="@(() => UriHelper.NavigateTo("/"))">Return</button>
-
-<form method="post">
-    <h1>Incident @Id</h1>
-    <div class="background row">
-        <div class="form-group col-2">
-            <label for="date">Date</label>
-            <input type="datetime" id="date" bind="@incident.Date" class="form-control" />
+<form class="incident-report-form" method="post">
+    <div class="background fieldset">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Incident</h2>
+            <code>@Id</code>
         </div>
-        <div class="form-group col-10">
-            <label for="summary">Summary</label>
-            <input type="text" id="summary" bind="@incident.Summary" class="form-control" />
+        <div class="row">
+            <div class="form-group col-3">
+                <label for="date">Date</label>
+                <input type="datetime" id="date" bind="@incident.Date" class="form-control" />
+            </div>
+            <div class="form-group col-9">
+                <label for="summary">Summary</label>
+                <input type="text" id="summary" bind="@incident.Summary" class="form-control" />
+            </div>
         </div>
     </div>
 
-    <div class="actions-taken row">
+    <div class="actions-taken fieldset">
         <h2>Actions Taken</h2>
         <ActionsTaken Actions="@actionsTaken" />
     </div>
 
-    <h2>Report</h2>
-    <div class="report">
+    <div class="report fieldset">
+        <h2>Report</h2>
         <div class="form-group">
             <label for="root-cause">Root Cause</label>
-            <input type="text" id="root-case" bind="@incident.RootCause" class="form-control" />
+            <textarea type="text" id="root-case" bind="@incident.RootCause" class="form-control" />
         </div>
         <div class="form-group">
             <label for="trigger">Trigger</label>
-            <input type="text" id="trigger" bind="@incident.Trigger" class="form-control" />
+            <textarea type="text" id="trigger" bind="@incident.Trigger" class="form-control" />
         </div>
         <div class="form-group">
             <label for="detection">Detection</label>
-            <input type="text" id="detection" bind="@incident.Detection" class="form-control" />
+            <textarea type="text" id="detection" bind="@incident.Detection" class="form-control" />
         </div>
         <div class="form-group">
             <label for="impact">Impact</label>
-            <input type="text" id="impact" bind="@incident.Impact" Class="form-control" />
+            <textarea type="text" id="impact" bind="@incident.Impact" Class="form-control" />
         </div>
         <div class="form-group">
             <label for="resolution">Resolution</label>
-            <input type="text" id="resolution" bind="@incident.Resolution" class="form-control" />
+            <textarea type="text" id="resolution" bind="@incident.Resolution" class="form-control" />
         </div>
         <div class="form-group">
             <label for="lessons-learned">Lessons Learned</label>
-            <input type="text" id="lessons-learned" bind="@incident.LessonsLearned" class="form-control" />
+            <textarea type="text" id="lessons-learned" bind="@incident.LessonsLearned" class="form-control" />
         </div>
     </div>
-    <div class="form-check">
-        <input type="checkbox" id="is-resolved" bind="@incident.IsResolved" class="form-check-input" />
-        <label class="form-check-label" for="is-resolved">Is Resolved</label>
+    <div class="actions d-flex justify-content-between align-items-center">
+        <button class="return-button btn btn-outline-secondary" type="button" onclick="@(() => UriHelper.NavigateTo("/"))">Return</button>
+        <div class="group"></div>
+        <div class="custom-control-lg custom-control custom-checkbox mr-4">
+            <input type="checkbox" id="is-resolved" bind="@incident.IsResolved" class="custom-control-input" />
+            <label class="custom-control-label" for="is-resolved">Is Resolved</label>
+        </div>
+        <!-- TODO: Auto-fill these from work item integration -->
+        <!-- <InputCollection Type="Work Item" Collection="@workItems" /> -->
+        <button class="btn btn-primary" type="button" onclick="@Submit">Save and Close</button>
     </div>
-    <!-- TODO: Auto-fill these from work item integration -->
-    <!-- <InputCollection Type="Work Item" Collection="@workItems" /> -->
-    <button class="btn btn-primary" type="button" onclick="@Submit">Save and Close</button>
 </form>
 
 

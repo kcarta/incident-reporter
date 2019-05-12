@@ -2,8 +2,7 @@
 @using IncidentReporter.Shared
 @inject HttpClient Http
 
-<a class="btn btn-outline-primary" role="button" href="/incident">New Incident</a>
-<h2>Active Incidents</h2>
+<h2 class="mt-4">Active Incidents</h2>
 <table class="table">
     <thead>
         <tr>
@@ -21,7 +20,8 @@
         }
     </tbody>
 </table>
-<h2>Resolved Incidents</h2>
+
+<h2 class="mt-4">Resolved Incidents</h2>
 <table class="table">
     <thead>
         <tr>
@@ -39,6 +39,10 @@
         }
     </tbody>
 </table>
+
+<div class="actions">
+    <a class="btn btn-outline-primary" role="button" href="/incident">New Incident</a>
+</div>
 
 @functions {
     private IEnumerable<Incident> incidents = new List<Incident>();
