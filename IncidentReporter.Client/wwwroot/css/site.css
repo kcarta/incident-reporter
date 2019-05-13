@@ -1,17 +1,40 @@
 ﻿@import url("open-iconic/font/css/open-iconic-bootstrap.min.css");
 html, body {
   font-family: 'lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #3e4851; }
+  color: #3e4851;
+  background: #f8f9fa; }
+
+body {
+  overflow-y: scroll; }
+
+.loader {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadein 800ms; }
+  .loader h1 {
+    font-size: 4rem; }
+
+.incident-lists {
+  background: #fff;
+  margin: 2rem 0;
+  padding: 2rem;
+  border-radius: 1rem;
+  min-height: calc(100vh - 9.5rem);
+  animation: fadein 150ms; }
 
 .incident-report-form {
-  padding: 1rem 0; }
+  padding: 1rem 0 0 0;
+  animation: fadein 150ms; }
 
 .fieldset {
   margin-bottom: 2rem;
-  background: #fafafa;
+  background: #fff;
   padding: 1.5rem 2rem;
   border-radius: 1rem;
-  border-bottom: 4px solid rgba(0, 23, 65, 0.16); }
+  border-bottom: 1px solid rgba(0, 23, 65, 0.16); }
   .fieldset:focus-within {
     border-bottom-color: rgba(0, 23, 65, 0.4); }
   @media (max-width: 776px) {
@@ -37,6 +60,9 @@ html, body {
     border-top: 0;
     font-weight: 500; }
 
+code {
+  color: #628fcf; }
+
 .form-control-plaintext {
   padding: calc(.375rem + 1px) calc(.75rem + 1px); }
 
@@ -50,3 +76,9 @@ html, body {
 .custom-control-lg .custom-control-label {
   margin-left: 0.5rem !important;
   font-size: 1rem !important; }
+
+@keyframes fadein {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
