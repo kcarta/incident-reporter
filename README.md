@@ -1,5 +1,5 @@
 # incident-reporter
-A simple webapp for reporting software incidents
+A simple [Blazor](https://docs.microsoft.com/en-us/aspnet/core/blazor/hosting-models?view=aspnetcore-3.0)-based webapp for reporting software incidents
 
 ## How to run
 
