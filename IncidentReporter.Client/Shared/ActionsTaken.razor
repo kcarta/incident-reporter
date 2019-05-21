@@ -2,7 +2,7 @@
 @using System.Timers
 @inject IJSRuntime JSRuntime
 
-<table class="table">
+<table class="table table-borderless actions-taken-table">
     <thead>
         <tr>
             <th class="w-auto">Timestamp</th>
@@ -21,7 +21,7 @@
                     <div class="form-group"><input type="text" bind="@actionTaken.Description" class="form-control" /></div>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-danger" onclick="@(() => Remove(actionTaken))">Remove</button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="@(() => Remove(actionTaken))"><span class="oi oi-x" title="Remove" aria-hidden="true"></span></button>
                 </td>
             </tr>
         }
@@ -31,6 +31,9 @@
             </td>
             <td>
                 <div class="form-group"><input type="text" bind="@DummyAction.Description" onfocusout="@Add" class="form-control" id="dummy-action-input" /></div>
+            </td>
+            <td>
+                <button type="button" class="btn btn-outline-secondary invisible"><span class="oi oi-x" title="Remove" aria-hidden="true"></span></button>
             </td>
         </tr>
     </tbody>
