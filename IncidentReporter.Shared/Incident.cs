@@ -16,6 +16,5 @@ namespace IncidentReporter.Shared
         public string Detection { get; set; }
         public string LessonsLearned { get; set; }
         public List<ActionTaken> ActionsTaken { get; set; }
-        public List<string> WorkItems { get; set; }
     }
 }
